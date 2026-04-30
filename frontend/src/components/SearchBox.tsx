@@ -3,15 +3,14 @@
 import { useState } from 'react';
 
 interface Hospital {
-  id: string;
-  displayName: {
-    text: string;
-  };
-  formattedAddress: string;
-  location: {
-    latitude: number;
-    longitude: number;
-  };
+  name: string;
+  zip: string;
+  address: string;
+  procedures?: {
+    type: string;
+    price: number;
+  }[];
+
   pricing?: {
     procedure: string;
     insurance_type: string;
@@ -75,8 +74,8 @@ export default function SearchBox() {
 
     try {
       const response = await fetch(
-        `/api/search/hospitals?zip=${zipCode}&radius=${radius}&insurance=${insuranceType}&procedure=${procedureType}`
-      );
+  `http://localhost:5000/api/search/hospitals?zip=${zipCode}&radius=${radius}&insurance=${insuranceType}&procedure=${procedureType}`
+);
       const data = await response.json();
 
       if (!response.ok) {
@@ -92,9 +91,11 @@ export default function SearchBox() {
   };
 
   const openInMaps = (hospital: Hospital) => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hospital.displayName.text)}&query_place_id=${hospital.id}`;
-    window.open(url, '_blank');
-  };
+  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    hospital.name + " " + hospital.address
+  )}`;
+  window.open(url, '_blank');
+};
 
   const openModal = (hospital: Hospital) => {
     setSelectedHospital(hospital);
@@ -294,7 +295,7 @@ export default function SearchBox() {
           <div className="grid gap-3 max-h-[500px] overflow-y-auto pr-1">
             {results.map((hospital, index) => (
               <div
-                key={hospital.id || index}
+                key={index}
                 onClick={() => openModal(hospital)}
                 className="bg-white/90 backdrop-blur-sm border border-neutral-200 rounded-xl p-4 hover:border-primary-300 hover:shadow-lg transition-all text-left cursor-pointer group"
               >
@@ -307,10 +308,10 @@ export default function SearchBox() {
                         </svg>
                       </div>
                       <h3 className="font-semibold text-neutral-900 group-hover:text-primary-600 transition-colors">
-                        {hospital.displayName.text}
+                        {hospital.name}
                       </h3>
                     </div>
-                    <p className="text-sm text-neutral-500 mt-2 ml-10">{hospital.formattedAddress}</p>
+                    <p className="text-sm text-neutral-500 mt-2 ml-10">{hospital.address}</p>
                   </div>
                   <div className="flex-shrink-0">
                     <div className="w-8 h-8 bg-neutral-100 group-hover:bg-primary-100 rounded-lg flex items-center justify-center transition-colors">
@@ -378,9 +379,9 @@ export default function SearchBox() {
                   </div>
                   <div>
                     <h2 className="font-semibold text-neutral-900 text-lg">
-                      {selectedHospital.displayName.text}
+                      {selectedHospital.name}
                     </h2>
-                    <p className="text-sm text-neutral-500">{selectedHospital.formattedAddress}</p>
+                    <p className="text-sm text-neutral-500">{selectedHospital.address}</p>
                   </div>
                 </div>
                 <button
