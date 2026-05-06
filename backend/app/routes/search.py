@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.db import mongo
+from app.services.hospitalSearch import find_hospitals_by_zip
 
 bp = Blueprint("search", __name__, url_prefix="/api/search")
 
@@ -16,15 +16,22 @@ def search_hospitals():
         return jsonify({"error": "zip is required"}), 400
 
     try:
-        results = list(
-            mongo.db.hospitals.find({"zip": zip_code}, {"_id": 0})
+        results = find_hospitals_by_zip(
+            zip_code=zip_code,
+            radius=radius,
+            procedure=procedure,
         )
 
         return jsonify({
-            "places": results,
+            "places": results.get("places", []),
             "zip": zip_code,
-            "count": len(results)
+            "radius": radius,
+            "insurance": insurance,
+            "procedure": procedure,
+            "count": results.get("count", 0),
         }), 200
 
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500

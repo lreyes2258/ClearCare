@@ -6,10 +6,7 @@ interface Hospital {
   name: string;
   zip: string;
   address: string;
-  procedures?: {
-    type: string;
-    price: number;
-  }[];
+  price?: number;
 
   pricing?: {
     procedure: string;
@@ -74,15 +71,15 @@ export default function SearchBox() {
 
     try {
       const response = await fetch(
-  `http://localhost:5000/api/search/hospitals?zip=${zipCode}&radius=${radius}&insurance=${insuranceType}&procedure=${procedureType}`
-);
+        `http://localhost:5000/api/search/hospitals?zip=${zipCode}&radius=${radius}&insurance=${insuranceType}&procedure=${procedureType}`
+      );
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to search hospitals');
       }
 
-      setResults(data.places || data.results || []);
+      setResults(data.places || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -91,11 +88,11 @@ export default function SearchBox() {
   };
 
   const openInMaps = (hospital: Hospital) => {
-  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    hospital.name + " " + hospital.address
-  )}`;
-  window.open(url, '_blank');
-};
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      hospital.name + " " + hospital.address
+    )}`;
+    window.open(url, '_blank');
+  };
 
   const openModal = (hospital: Hospital) => {
     setSelectedHospital(hospital);
@@ -116,7 +113,7 @@ export default function SearchBox() {
   };
 
   const calculateAdjustedPricing = (hospital: Hospital) => {
-    const baseCost = hospital.pricing?.base_cost || 350;
+    const baseCost = hospital.price ?? 350;
 
     // Calculate insurance coverage based on selected insurance type
     let insuranceCoveragePercent = 0;
@@ -323,23 +320,14 @@ export default function SearchBox() {
                 </div>
 
                 {/* Pricing Section */}
-                {hospital.pricing && (
+                {hospital.price != null && (
                   <div className="mt-3 ml-10 p-3 bg-neutral-50 rounded-lg border border-neutral-100">
-                    <div className="grid grid-cols-3 gap-2 text-center">
-                      <div>
-                        <p className="text-xs text-neutral-500">Est. Cost</p>
-                        <p className="font-semibold text-neutral-900">${hospital.pricing.base_cost.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-neutral-500">Insurance Pays</p>
-                        <p className="font-semibold text-green-600">${hospital.pricing.insurance_coverage.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-neutral-500">You Pay</p>
-                        <p className="font-semibold text-primary-600">${hospital.pricing.out_of_pocket.toLocaleString()}</p>
-                      </div>
+                    <div className="text-center">
+                      <p className="text-xs text-neutral-500">Est. Cost</p>
+                      <p className="font-semibold text-primary-600">
+                        ${hospital.price ?? "N/A"}
+                      </p>
                     </div>
-                    <p className="text-xs text-neutral-400 mt-2 text-center">{hospital.pricing.disclaimer}</p>
                   </div>
                 )}
               </div>

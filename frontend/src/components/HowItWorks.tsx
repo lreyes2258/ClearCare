@@ -36,11 +36,11 @@ export default function HowItWorks() {
 
         <div className="relative">
           {/* Connection Line - Desktop */}
-          <div className="hidden lg:block absolute top-24 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-primary-200 via-primary-400 to-primary-200"></div>
+          <div className="hidden lg:block absolute top-[32px] left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-primary-200 via-primary-400 to-primary-200 z-0"></div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
-              <div key={index} className="relative text-center">
+              <div key={index} className="relative z-10 text-center">
                 {/* Step Number Circle */}
                 <div className="relative z-10 w-16 h-16 bg-primary-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <span className="text-xl font-bold">{step.number}</span>
