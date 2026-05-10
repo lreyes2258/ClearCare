@@ -1,0 +1,230 @@
+[{
+  "_id": {
+    "$oid": "69f3150a0c24cc86a4e57856"
+  },
+  "name": "Sharp Memorial Hospital",
+  "zip": "92123",
+  "address": "7901 Frost St, San Diego, CA",
+  "procedures": [
+    {
+      "type": "general_visit",
+      "price": 250
+    },
+    {
+      "type": "x_ray",
+      "price": 180
+    },
+    {
+      "type": "blood_test",
+      "price": 90
+    }
+  ],
+  "npi": 1407839921
+},
+{
+  "_id": {
+    "$oid": "69fd581acfac503630fcef8d"
+  },
+  "name": "Scripps Mercy Hospital San Diego",
+  "zip": "92103",
+  "address": "4077 Fifth Ave, San Diego, CA",
+  "procedures": [
+    {
+      "type": "general_visit",
+      "price": 240
+    },
+    {
+      "type": "x_ray",
+      "price": 170
+    },
+    {
+      "type": "blood_test",
+      "price": 85
+    }
+  ],
+  "npi": 1659359446
+},
+{
+  "_id": {
+    "$oid": "69fd58bacfac503630fcef8f"
+  },
+  "name": "Scripps Memorial Hospital La Jolla",
+  "zip": "92037",
+  "address": "9888 Genesee Ave, La Jolla, CA",
+  "procedures": [
+    {
+      "type": "general_visit",
+      "price": 290
+    },
+    {
+      "type": "x_ray",
+      "price": 210
+    },
+    {
+      "type": "blood_test",
+      "price": 100
+    }
+  ],
+  "npi": 1841277704
+},
+{
+  "_id": {
+    "$oid": "69fd58cdcfac503630fcef91"
+  },
+  "name": "UC San Diego Health",
+  "zip": "92120",
+  "address": "6655 Alvarado Rd, San Diego, CA",
+  "procedures": [
+    {
+      "type": "general_visit",
+      "price": 320
+    },
+    {
+      "type": "x_ray",
+      "price": 220
+    },
+    {
+      "type": "blood_test",
+      "price": 110
+    }
+  ],
+  "npi": 1265468946
+},
+{
+  "_id": {
+    "$oid": "69fd58decfac503630fcef93"
+  },
+  "name": "Palomar Medical Center Escondido",
+  "zip": "92029",
+  "address": "2185 Citracado Pkwy, Escondido, CA",
+  "procedures": [
+    {
+      "type": "general_visit",
+      "price": 260
+    },
+    {
+      "type": "x_ray",
+      "price": 190
+    },
+    {
+      "type": "blood_test",
+      "price": 95
+    }
+  ],
+  "npi": 1457321317
+},
+{
+  "_id": {
+    "$oid": "69fd58f1cfac503630fcef95"
+  },
+  "name": "Kindred Hospital San Diego",
+  "zip": "92104",
+  "address": "1940 El Cajon Blvd, San Diego, CA",
+  "procedures": [
+    {
+      "type": "general_visit",
+      "price": 210
+    },
+    {
+      "type": "x_ray",
+      "price": 160
+    },
+    {
+      "type": "blood_test",
+      "price": 75
+    }
+  ],
+  "npi": 1881923951
+},
+{
+  "_id": {
+    "$oid": "69fd5981cfac503630fcef97"
+  },
+  "name": "Hillcrest Medical Center at UC San Diego Health",
+  "zip": "92103",
+  "address": "200 W Arbor Dr, San Diego, CA",
+  "procedures": [
+    {
+      "type": "general_visit",
+      "price": 320
+    },
+    {
+      "type": "x_ray",
+      "price": 220
+    },
+    {
+      "type": "blood_test",
+      "price": 110
+    }
+  ],
+  "npi": 1699877621
+},
+{
+  "_id": {
+    "$oid": "69fd5992cfac503630fcef99"
+  },
+  "name": "Jacobs Medical Center at UC San Diego Health",
+  "zip": "92037",
+  "address": "9300 Campus Point Dr, La Jolla, CA",
+  "procedures": [
+    {
+      "type": "general_visit",
+      "price": 340
+    },
+    {
+      "type": "x_ray",
+      "price": 240
+    },
+    {
+      "type": "blood_test",
+      "price": 120
+    }
+  ],
+  "npi": 1497014278
+},
+{
+  "_id": {
+    "$oid": "69fd59a8cfac503630fcef9b"
+  },
+  "name": "Kaiser Permanente San Diego Medical Center",
+  "zip": "92123",
+  "address": "9455 Clairemont Mesa Blvd, San Diego, CA",
+  "procedures": [
+    {
+      "type": "general_visit",
+      "price": 230
+    },
+    {
+      "type": "x_ray",
+      "price": 170
+    },
+    {
+      "type": "blood_test",
+      "price": 85
+    }
+  ],
+  "npi": 1013062769
+},
+{
+  "_id": {
+    "$oid": "69fd59bacfac503630fcef9d"
+  },
+  "name": "Rady Children’s Hospital - San Diego",
+  "zip": "92123",
+  "address": "3020 Children's Way, San Diego, CA",
+  "procedures": [
+    {
+      "type": "general_visit",
+      "price": 260
+    },
+    {
+      "type": "x_ray",
+      "price": 190
+    },
+    {
+      "type": "blood_test",
+      "price": 95
+    }
+  ],
+  "npi": 1710065933
+}]
