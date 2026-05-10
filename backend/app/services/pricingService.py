@@ -1,94 +1,123 @@
-"""Mock pricing service for healthcare cost estimation."""
+import os
+import requests
 
-import hashlib
-from typing import Any
+PAYERBENCHMARK_API_KEY = os.getenv("PAYERBENCHMARK_API_KEY") 
 
-# Insurance types with coverage rates
-INSURANCE_TYPES = {
-    "uninsured": {"label": "Uninsured", "coverage_rate": 0.0},
-    "private": {"label": "Private Insurance", "coverage_rate": 0.70},
-    "medicare": {"label": "Medicare", "coverage_rate": 0.80},
-    "medicaid": {"label": "Medicaid", "coverage_rate": 0.90},
-}
+def call_pricing_api(cpt_code, payer_name, npi_number):
+    """ Calls the PayerBenchmark API to retrieve pricing information for a given CPT code, 
+    payer name, and NPI number. All of these are rates that are negotiated by the hospitals and payers
+    This API should have access to this info."""
+    
+    
+    url = "https://api.payerbenchmark.com/v1/rates"
+    
+    headers = { "Accept": "application/json" }
+    
+    if PAYERBENCHMARK_API_KEY:
+        headers["Authorization"] = f"Bearer {PAYERBENCHMARK_API_KEY}"
 
-# Procedures with price ranges (min, max)
-PROCEDURES = {
-    "general_visit": {"label": "General Visit", "min": 150, "max": 400},
-    "lab_work": {"label": "Lab Work", "min": 100, "max": 500},
-    "xray": {"label": "X-Ray", "min": 200, "max": 600},
-    "ct_scan": {"label": "CT Scan", "min": 500, "max": 1500},
-    "mri": {"label": "MRI", "min": 800, "max": 2500},
-    "minor_surgery": {"label": "Minor Surgery", "min": 1500, "max": 5000},
-}
+    params = {
+        "procedure_code": cpt_code,
+        "payer": payer_name,
+        "npi": npi_number
+    }
+    
+    try:
+        response = requests.get(url, headers =headers, params =params, timeout =30)
+
+        if response.status_code != 200:
+            return None
+        return response.json()
+        
+        
+    except requests.exceptions.RequestException as e:
+        print(f"Error calling API: {e}")
+        return None
+
+def find_lowest_price(api_response):
+    if not api_response:
+        return None
+
+    rates = api_response.get("data") or api_response.get("rates") or []
+
+    if not rates:
+        return None
+
+    valid_rates = []
+
+    for rate in rates:
+        negotiated_rate = rate.get("negotiated_rate")
+
+        if negotiated_rate is None:
+            continue
+
+        try:
+            negotiated_rate = float(negotiated_rate)
+        except ValueError:
+            continue
+
+        valid_rates.append({
+            "negotiated_rate": negotiated_rate,
+            "payer": rate.get("payer"),
+            "network_key": rate.get("network_key"),
+            "procedure_code": rate.get("procedure_code"),
+            "rate_type": rate.get("rate_type"),
+            "effective_date": rate.get("effective_date")
+        })
+
+    if not valid_rates:
+        return None
+
+    return min(valid_rates, key=lambda item: item["negotiated_rate"])
 
 
-def generate_hospital_price(hospital_id: str, procedure: str) -> int:
-    """
-    Generate a deterministic price for a hospital/procedure combination.
-    Uses hash of hospital_id + procedure to ensure same hospital always
-    returns same price for same procedure.
-    """
-    if procedure not in PROCEDURES:
-        procedure = "general_visit"
+def compare_pricing_between_hospitals(hospitals, cpt_code, payer_name, limit = 5):
+    api_response = call_pricing_api(cpt_code, payer_name, npi_number)
 
-    proc_info = PROCEDURES[procedure]
-    price_range = proc_info["max"] - proc_info["min"]
-
-    # Create deterministic hash from hospital_id and procedure
-    hash_input = f"{hospital_id}:{procedure}"
-    hash_value = int(hashlib.md5(hash_input.encode()).hexdigest(), 16)
-
-    # Map hash to price range
-    price_offset = hash_value % (price_range + 1)
-    base_price = proc_info["min"] + price_offset
-
-    return base_price
-
-
-def enrich_hospitals_with_pricing(
-    hospitals: list[dict[str, Any]],
-    insurance_type: str = "uninsured",
-    procedure: str = "general_visit",
-) -> list[dict[str, Any]]:
-    """
-    Add pricing information to hospital results.
-
-    Args:
-        hospitals: List of hospital dictionaries from search results
-        insurance_type: Type of insurance (uninsured, private, medicare, medicaid)
-        procedure: Type of procedure (general_visit, lab_work, xray, ct_scan, mri, minor_surgery)
-
-    Returns:
-        List of hospitals with pricing information added
-    """
-    # Validate inputs with defaults
-    if insurance_type not in INSURANCE_TYPES:
-        insurance_type = "uninsured"
-    if procedure not in PROCEDURES:
-        procedure = "general_visit"
-
-    insurance_info = INSURANCE_TYPES[insurance_type]
-    procedure_info = PROCEDURES[procedure]
-
-    enriched_hospitals = []
+    results = []
     for hospital in hospitals:
-        hospital_id = hospital.get("id", "")
-        base_cost = generate_hospital_price(hospital_id, procedure)
+        # go through hospitals by NPI # and call the API for each hospital
+        npi_number = hospital.get("npi_number") or hospital.get("npi")
 
-        # Calculate insurance coverage and out of pocket
-        insurance_coverage = int(base_cost * insurance_info["coverage_rate"])
-        out_of_pocket = base_cost - insurance_coverage
+        # Skip hospitals that do not have an NPI
+        if not npi_number:
+            continue
 
-        # Add pricing to hospital
-        hospital_copy = dict(hospital)
-        hospital_copy["pricing"] = {
-            "procedure": procedure_info["label"],
-            "insurance_type": insurance_info["label"],
-            "base_cost": base_cost,
-            "insurance_coverage": insurance_coverage,
-            "out_of_pocket": out_of_pocket,
-            "disclaimer": "Estimated costs for demonstration only. Actual costs may vary.",
-        }
-        enriched_hospitals.append(hospital_copy)
+        # Call the pricing API for this specific hospital
+        api_response = call_pricing_api(
+            cpt_code=cpt_code,
+            payer_name=payer_name,
+            npi_number=npi_number
+        )
 
-    return enriched_hospitals
+        results.append({
+        "hospital_npi": npi_number,
+        "address": hospital.get("address"),
+        "city": hospital.get("city"),
+        "state": hospital.get("state"),
+        "zip": hospital.get("zip"),
+        "lowest_price": lowest_price_info["negotiated_rate"],
+        "payer": lowest_price_info["payer"],
+        "procedure_code": lowest_price_info["procedure_code"],
+        "rate_type": lowest_price_info["rate_type"],
+        "effective_date": lowest_price_info["effective_date"]
+        
+    })
+
+    if not api_response:
+        continue
+
+    lowest_price_info = find_lowest_price(api_response)
+    
+
+    #No price found 
+    if not lowest_price_info:
+        print("No valid rates found ")
+        continue
+          
+
+    # Sort cheapest to most expensive
+    results.sort(key=lambda item: item["negotiated_rate"])
+
+    # Return only the top cheapest results
+    return results[:limit]
