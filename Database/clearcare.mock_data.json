@@ -1,0 +1,96 @@
+{
+  "payers": [
+    { "name": "Aetna", "active": true },
+    { "name": "Cigna", "active": true },
+    { "name": "UnitedHealthcare", "active": true },
+    { "name": "Blue Shield of California", "active": true },
+    { "name": "Anthem Blue Cross", "active": true }
+  ],
+
+  "procedures": [
+    { "code": "70551", "name": "MRI Brain (no contrast)" },
+    { "code": "70553", "name": "MRI Brain (with and without contrast)" },
+    { "code": "71046", "name": "Chest X-ray (2 views)" },
+    { "code": "72148", "name": "MRI Lumbar Spine (no contrast)" },
+    { "code": "73721", "name": "MRI Knee (no contrast)" },
+    { "code": "74177", "name": "CT Abdomen and Pelvis (with contrast)" },
+    { "code": "71260", "name": "CT Chest (with contrast)" },
+    { "code": "45378", "name": "Colonoscopy (diagnostic)" },
+    { "code": "43235", "name": "Upper GI Endoscopy" },
+    { "code": "80053", "name": "Comprehensive Metabolic Panel" },
+    { "code": "80061", "name": "Lipid Panel" },
+    { "code": "83036", "name": "Hemoglobin A1C" },
+    { "code": "36415", "name": "Blood Draw (Venipuncture)" },
+    { "code": "93000", "name": "Electrocardiogram (EKG)" },
+    { "code": "97110", "name": "Physical Therapy (therapeutic exercise)" }
+  ],
+
+  "mock_prices": [
+    {
+      "npi": 1407839921,
+      "payer": "Aetna",
+      "procedure_code": "70551",
+      "negotiated_rate": 650
+    },
+    {
+      "npi": 1659359446,
+      "payer": "Aetna",
+      "procedure_code": "70551",
+      "negotiated_rate": 590
+    },
+    {
+      "npi": 1841277704,
+      "payer": "Aetna",
+      "procedure_code": "70551",
+      "negotiated_rate": 720
+    },
+    {
+      "npi": 1265468946,
+      "payer": "Aetna",
+      "procedure_code": "70551",
+      "negotiated_rate": 810
+    },
+    {
+      "npi": 1457321317,
+      "payer": "Aetna",
+      "procedure_code": "70551",
+      "negotiated_rate": 675
+    },
+    {
+      "npi": 1407839921,
+      "payer": "Cigna",
+      "procedure_code": "71046",
+      "negotiated_rate": 145
+    },
+    {
+      "npi": 1659359446,
+      "payer": "Cigna",
+      "procedure_code": "71046",
+      "negotiated_rate": 130
+    },
+    {
+      "npi": 1841277704,
+      "payer": "Cigna",
+      "procedure_code": "71046",
+      "negotiated_rate": 170
+    },
+    {
+      "npi": 1407839921,
+      "payer": "UnitedHealthcare",
+      "procedure_code": "45378",
+      "negotiated_rate": 1800
+    },
+    {
+      "npi": 1659359446,
+      "payer": "UnitedHealthcare",
+      "procedure_code": "45378",
+      "negotiated_rate": 1500
+    },
+    {
+      "npi": 1841277704,
+      "payer": "UnitedHealthcare",
+      "procedure_code": "45378",
+      "negotiated_rate": 2100
+    }
+  ]
+}
