@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 
-from app import mongo
+from app.db import mongo
 
 from app.repositories.hospitalRepo import find_all_hospitals
 from app.services.pricingService import compare_pricing_between_hospitals
