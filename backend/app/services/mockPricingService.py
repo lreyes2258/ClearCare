@@ -1,4 +1,4 @@
-from app import mongo
+from app.db import mongo
 
 
 def find_mock_price_for_hospital(cpt_code, payer_name, npi_number):
