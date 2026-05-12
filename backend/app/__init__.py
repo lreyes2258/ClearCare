@@ -18,7 +18,7 @@ def create_app():
     mongo.init_app(app)
 
     # Register blueprints
-    from app.routes import search
-    app.register_blueprint(search.bp)
+    from app.routes import mockSearch   #changed from search
+    app.register_blueprint(mockSearch.bp) #changed from search
 
     return app
