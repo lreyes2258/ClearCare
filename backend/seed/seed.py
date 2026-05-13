@@ -7,7 +7,7 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client["clearcare"]
 
 # Path to mock data file
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parents[2]  #equivalent to .parent.parent.parent
 MOCK_DATA_PATH = BASE_DIR / "Database" / "clearcare.mock_data.json"
 HOSPITALS_PATH = BASE_DIR / "Database" / "clearcare.hospitals.json"
 
